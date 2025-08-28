@@ -8,10 +8,10 @@ def generate_rhy_rnaseq(t=np.arange(0, 21, 4),
                         period=24,
                         n_genes=10000,
                         rhy_frac=0.1,
-                        min_A_effect=0.0,
+                        min_A_effect=0.5,
                         A_spread=1,
                         emp_dist=None,
-                        depth=1e7,
+                        depth=4e7,
                         lib_size_var=(0.8, 1.2),
                         seed=None):
     
@@ -78,14 +78,14 @@ def generate_diffrhy_rnaseq(t=np.arange(0, 21, 4),
                             period=24,
                             n_genes=10000,
                             rhy_frac=0.1,
-                            min_A_effect=0.0,
+                            min_A_effect=0.5,
                             A_spread=1,
                             DE_frac=0.1,
                             min_DE_effect=0.5,
                             DE_spread=1,
                             groups=("ctrl", "expt"),
                             emp_dist=None,
-                            depth=1e7,
+                            depth=4e7,
                             lib_size_var=(0.8, 1.2),
                             seed=None):
     
@@ -110,7 +110,6 @@ def generate_diffrhy_rnaseq(t=np.arange(0, 21, 4),
                 rng.exponential(1/A_spread, (n_genes, 2))
     A[~G_rhy, :] = 1.0
     phi = rng.uniform(size=(n_genes, 2)) * 2 * np.pi * G_rhy.reshape(-1, 1)
-    print(A[~G_rhy,:][1:10,])
 
     G_rhy_index = np.where(G_rhy)[0]
     for i in range(len(DR_groups)):
@@ -120,7 +119,7 @@ def generate_diffrhy_rnaseq(t=np.arange(0, 21, 4),
             A[G_rhy_index[i], 1] = 1.0
         elif DR_groups[i] == "same":
             A[G_rhy_index[i], 0] = A[G_rhy_index[i], 1]
-            phi[G_rhy_index[i], 1] = phi[G_rhy_index[i], 0]
+            phi[G_rhy_index[i], 0] = phi[G_rhy_index[i], 1]
 
     params = pd.DataFrame({
         'id': [f"g{i+1}" for i in np.where(G_rhy)[0]],
