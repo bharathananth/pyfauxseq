@@ -38,3 +38,15 @@ def load_dataset(filename):
             return pd.read_csv(data_path)
         else:
             raise ValueError("Unsupported file format")
+
+def normalize_counts(counts, log=True):
+    norm_counts = counts/np.sum(counts, axis=0)/median_of_ratios(counts)*1e6
+    if log:
+        norm_counts = np.log2(1 + norm_counts)
+    return(norm_counts)
+
+def median_of_ratios(counts):
+    counts = counts[count.sum(axis=1)>0]
+    return(2 ** np.nanmedian(np.log2(counts) - \
+        np.nanmean(np.log2(counts), axis=1, keepdims=True), axis=0))
+    
