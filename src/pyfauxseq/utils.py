@@ -46,7 +46,7 @@ def normalize_counts(counts, log=True):
     return(norm_counts)
 
 def median_of_ratios(counts):
-    counts = counts[count.sum(axis=1)>0]
+    counts = counts[counts.sum(axis=1)>0]
     return(2 ** np.nanmedian(np.log2(counts) - \
         np.nanmean(np.log2(counts), axis=1, keepdims=True), axis=0))
     
