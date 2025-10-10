@@ -1,9 +1,11 @@
+import errno
 import numpy as np
+import os
 import pandas as pd
 from scipy.stats import nbinom
 from .utils import load_dataset
 
-def generate_rhy_rnaseq(t=np.arange(0, 21, 4),
+def generate_rhythmic_rnaseq(t=np.arange(0, 21, 4),
                         reps=None,
                         period=24,
                         n_genes=10000,
@@ -25,6 +27,16 @@ def generate_rhy_rnaseq(t=np.arange(0, 21, 4),
 
     if emp_dist is None:
         emp_dist = load_dataset("Mm_liver_LD_NC.csv.gz")
+    elif isinstance(emp_dist, str):
+        if os.path.isfile(emp_dist):
+            emp_dist = load_dataset(emp_dist)
+            if emp_dist.shape[1]>2:
+                grouped = emp_dist.groupby(by = list(pd.Index.difference(emp_dist.columns, ["size", "mu"])))
+                emp_dist = grouped.get_group(rng.choice(list(grouped.groups.keys())))
+        else:
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
+    elif not isinstance(emp_dist, pd.DataFrame):
+        raise ValueError("The provided emp_dist is invalid.")
 
     n_rhy = int(np.round(rhy_frac * n_genes))
 
@@ -73,7 +85,7 @@ def generate_rhy_rnaseq(t=np.arange(0, 21, 4),
         'exp_design': exp_design
     }
 
-def generate_diffrhy_rnaseq(t=np.arange(0, 21, 4),
+def generate_diffrhythmic_rnaseq(t=np.arange(0, 21, 4),
                             reps=None,
                             period=24,
                             n_genes=10000,
@@ -99,6 +111,16 @@ def generate_diffrhy_rnaseq(t=np.arange(0, 21, 4),
 
     if emp_dist is None:
         emp_dist = load_dataset("Mm_liver_LD_NC.csv.gz")
+    elif isinstance(emp_dist, str):
+        if os.path.isfile(emp_dist):
+            emp_dist = load_dataset(emp_dist)
+            if emp_dist.shape[1]>2:
+                grouped = emp_dist.groupby(by = list(pd.Index.difference(emp_dist.columns, ["size", "mu"])))
+                emp_dist = grouped.get_group(rng.choice(list(grouped.groups.keys())))
+        else:
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
+    elif not isinstance(emp_dist, pd.DataFrame):
+        raise ValueError("The provided emp_dist is invalid.")
 
     t = np.repeat(t, reps)
     N = len(t)

@@ -3,6 +3,6 @@
 __author__ = """Bharath Ananthasubramaniam"""
 __email__ = 'bharath.ananthasubramaniam@hu-berlin.de'
 
-from .generate_rnaseq import generate_rhy_rnaseq, generate_diffrhy_rnaseq
+from .generate_rnaseq import generate_rhythmic_rnaseq, generate_diffrhythmic_rnaseq
 
-__all__ = ["generate_rhy_rnaseq", "generate_diffrhy_rnaseq"]
+__all__ = ["generate_rhythmic_rnaseq", "generate_diffrhythmic_rnaseq"]
