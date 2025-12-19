@@ -161,8 +161,6 @@ def generate_diffrhythmic_rnaseq(t=np.arange(0, 21, 4),
         np.sin(phi[:, [1]]) @ np.sin(2 * np.pi * t[None, :] / period)
     ])
     
-    print(t_pattern.shape)
-
     G_DE = rng.uniform(size=n_genes) <= DE_frac
     DE_effects = (1 + min_DE_effect + 
                     rng.exponential(1/DE_spread, n_genes)) ** \
