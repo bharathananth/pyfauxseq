@@ -93,3 +93,5 @@ test = { features = ["test"], solve-group = "default" }
 [tool.pixi.feature.test.dependencies]
 ruff = ">=0.15.5,<0.16"
 ty = ">=0.0.21,<0.0.22"
+ipykernel = ">=7.2.0,<8"
+pandas-stubs = ">=3.0.0.260204,<4"
