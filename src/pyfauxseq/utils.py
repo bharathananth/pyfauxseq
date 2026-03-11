@@ -1,15 +1,37 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import importlib.resources
-import numpy as np
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import numpy as np
 import pandas as pd
+
 from pyfauxseq import data
 
+
 def drop_counts(y, N):
+    """Downsample count data for a single sample such that total counts = N
+
+    Parameters
+    ----------
+    y : array-like
+        count data for one sample
+    N : int
+        target total counts
+
+    Returns
+    -------
+    array
+        downsampled counts
+
+    Raises
+    ------
+    ValueError
+        if target counts exceeds actual sum of counts
+    """
     total = np.sum(y)
 
     if total < N:
-        raise ValueError("N is larger than the total number of objects.")
+        raise ValueError("N is larger than the total counts.")
 
     if total == N:
         return y
@@ -19,6 +41,22 @@ def drop_counts(y, N):
         return np.bincount(removed, minlength=len(y))
 
 def downsample(counts, parallel=True, ncores=None):
+    """Downsample multiple samples in parallel
+
+    Parameters
+    ----------
+    counts : ndarray
+        count data to be downsampled (n_genes * n_samples)
+    parallel : bool, optional
+        should samples be processed in parallel, by default True
+    ncores : int | None, optional
+        number of cores to be used, by default None (use all available)
+
+    Returns
+    -------
+    ndarray
+        downsampled count data matrix
+    """
     min_lib_size = np.min(np.sum(counts, axis=0))
 
     if parallel:
@@ -33,6 +71,23 @@ def downsample(counts, parallel=True, ncores=None):
     return downsampled_counts
 
 def load_dataset(filename):
+    """helper function to read data from files (currently only csv supported)
+
+    Parameters
+    ----------
+    filename : str
+        filename to be read
+
+    Returns
+    -------
+    pandas DataFrame
+        file contents as a DataFrame
+
+    Raises
+    ------
+    ValueError
+        if unsupported file format (not csv)
+    """
     with importlib.resources.path(data, filename) as data_path:
         if ".csv" in filename:
             return pd.read_csv(data_path)
@@ -40,13 +95,40 @@ def load_dataset(filename):
             raise ValueError("Unsupported file format")
 
 def normalize_counts(counts, log=True):
+    """Normalize count data using median of ratios followed by optional log 
+    transformation
+
+    Parameters
+    ----------
+    counts : pandas DataFrame
+        count data to be normalized
+    log : bool, optional
+        should the normalized counts be log2 transformed, by default True
+
+    Returns
+    -------
+    pandas DataFrame
+        normalized count data
+    """
     norm_counts = counts/np.sum(counts, axis=0)/median_of_ratios(counts)*1e6
     if log:
         norm_counts = np.log2(1 + norm_counts)
-    return(norm_counts)
+    return norm_counts
 
 def median_of_ratios(counts):
+    """Helper function to compute median of ratios for each sample
+
+    Parameters
+    ----------
+    counts : pandas DataFrame
+        count data matrix (n_genes * n_samples)
+
+    Returns
+    -------
+    ndarray
+        median of ratios
+    """    
     counts = counts.to_numpy()
-    return(2 ** np.ma.median(np.ma.log2(counts) - \
-        np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True), axis=0))
-    
+    return 2 ** np.ma.median(np.ma.log2(counts) - \
+        np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True), axis=0)
+
