@@ -25,7 +25,7 @@ def nb_fit(x):
             return pd.Series({'size': result.x[0], 'mu': m})
         else:
             return pd.Series({'size': np.nan, 'mu': np.nan})
-    except Exception as e:
+    except Exception:
         return pd.Series({'size': np.nan, 'mu': np.nan})
 
 def estimate_disp_dist(counts, parallel=True, ncores=None):
