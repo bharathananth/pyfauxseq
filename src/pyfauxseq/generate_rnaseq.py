@@ -139,7 +139,7 @@ def generate_rhythmic_rnaseq(
 
     mu = lambda_ / (np.sum(lambda_, axis=0) / lib_size)
 
-    counts = nbinom.rvs(n=size, p=size / (mu + size))
+    counts = nbinom.rvs(n=size, p=size / (mu + size), random_state=seed)
 
     exp_design = pd.DataFrame(
         {
@@ -344,7 +344,7 @@ def generate_diffrhythmic_rnaseq(
 
     mu = lambda_ / (np.sum(lambda_, axis=0) / lib_size)
 
-    counts = nbinom.rvs(n=size, p=size / (mu + size))
+    counts = nbinom.rvs(n=size, p=size / (mu + size), random_state=seed)
 
     exp_design = pd.DataFrame(
         {"time": np.tile(t, 2), "group": np.repeat(groups, N)},
