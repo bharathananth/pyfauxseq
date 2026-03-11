@@ -1,7 +1,7 @@
 [project]
 name = "pyfauxseq"
 version = "0.1.0"
-description = "This package can generate synthetic rhythmic timeseries RNAseq datasets."
+description = "This package generates synthetic rhythmic timeseries RNAseq datasets."
 readme = "README.md"
 authors = [
   {name = "Bharath Ananthasubramaniam", email = "bharath.ananthasubramaniam@hu-berlin.de"}
@@ -12,13 +12,13 @@ maintainers = [
 classifiers = [
     # TODO
 ]
-license = "GPL-3.0-or-later"
+license = "MIT"
 dependencies = [
   "numpy",
   "scipy",
   "pandas"
 ]
-requires-python = ">= 3.9"
+requires-python = ">= 3.10"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -65,3 +65,16 @@ select = [
 
 [tool.uv]
 package = true
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "win-64", "osx-arm64"]
+
+[tool.pixi.pypi-dependencies]
+pyfauxseq = { path = ".", editable = true }
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+test = { features = ["test"], solve-group = "default" }
+
+[tool.pixi.tasks]
