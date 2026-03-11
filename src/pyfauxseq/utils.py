@@ -1,3 +1,13 @@
+"""Utility functions to downsample and normalize count data.
+
+This module provides:
+- drop_counts: to downsample counts to a certain depth
+- downsample: to downsample counts in multiple samples to a common depth
+- load_dataset: to load csv data
+- normalize_counts: to normalize count data using median of ratios
+- median_of_ratios: to estimate median of ratios for the samples
+"""
+
 import importlib.resources
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -9,7 +19,7 @@ from pyfauxseq import data
 
 
 def drop_counts(y, N):
-    """Downsample count data for a single sample such that total counts = N
+    """Downsample count data for a single sample such that total counts equals N.
 
     Parameters
     ----------
@@ -40,8 +50,9 @@ def drop_counts(y, N):
         removed = np.random.choice(all_reads, N, replace=False)
         return np.bincount(removed, minlength=len(y))
 
+
 def downsample(counts, parallel=True, ncores=None):
-    """Downsample multiple samples in parallel
+    """Downsample multiple samples in parallel.
 
     Parameters
     ----------
@@ -63,15 +74,23 @@ def downsample(counts, parallel=True, ncores=None):
         if ncores is None:
             ncores = min(32, (os.cpu_count() or 1) + 4)  # Default to number of CPUs
         with ThreadPoolExecutor(max_workers=ncores) as executor:
-            futures = [executor.submit(drop_counts, counts[:, i], min_lib_size) for i in range(counts.shape[1])]
-            downsampled_counts = np.column_stack([future.result() for future in as_completed(futures)])
+            futures = [
+                executor.submit(drop_counts, counts[:, i], min_lib_size)
+                for i in range(counts.shape[1])
+            ]
+            downsampled_counts = np.column_stack(
+                [future.result() for future in as_completed(futures)]
+            )
     else:
-        downsampled_counts = np.column_stack([drop_counts(counts[:, i], min_lib_size) for i in range(counts.shape[1])])
+        downsampled_counts = np.column_stack(
+            [drop_counts(counts[:, i], min_lib_size) for i in range(counts.shape[1])]
+        )
 
     return downsampled_counts
 
+
 def load_dataset(filename):
-    """helper function to read data from files (currently only csv supported)
+    """Read data from files (currently only csv supported).
 
     Parameters
     ----------
@@ -94,9 +113,9 @@ def load_dataset(filename):
         else:
             raise ValueError("Unsupported file format")
 
+
 def normalize_counts(counts, log=True):
-    """Normalize count data using median of ratios followed by optional log 
-    transformation
+    """Normalize counts using median of ratios with optional log transform.
 
     Parameters
     ----------
@@ -110,13 +129,14 @@ def normalize_counts(counts, log=True):
     pandas DataFrame
         normalized count data
     """
-    norm_counts = counts/np.sum(counts, axis=0)/median_of_ratios(counts)*1e6
+    norm_counts = counts / np.sum(counts, axis=0) / median_of_ratios(counts) * 1e6
     if log:
         norm_counts = np.log2(1 + norm_counts)
     return norm_counts
 
+
 def median_of_ratios(counts):
-    """Helper function to compute median of ratios for each sample
+    """Compute median of ratios for each sample.
 
     Parameters
     ----------
@@ -127,8 +147,9 @@ def median_of_ratios(counts):
     -------
     ndarray
         median of ratios
-    """    
+    """
     counts = counts.to_numpy()
-    return 2 ** np.ma.median(np.ma.log2(counts) - \
-        np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True), axis=0)
-
+    return 2 ** np.ma.median(
+        np.ma.log2(counts) - np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True),
+        axis=0,
+    )

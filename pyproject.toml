@@ -51,7 +51,12 @@ homepage = "https://github.com/bharathananth/pyfauxseq"
 # rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
 
 [tool.ruff]
-line-length = 120
+line-length = 88
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
 
 [tool.ruff.lint]
 select = [
@@ -61,7 +66,13 @@ select = [
     "I",   # isort
     "B",   # flake8-bugbear
     "UP",  # pyupgrade
+    "D",   # pydocstyle (enforces docstring conventions like PEP 257)
+    "SIM", # flake8-simplify
+    "RUF", # Ruff-specific rules
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy" # Options: "google", "numpy", or "pep257"
 
 [tool.uv]
 package = true
@@ -78,3 +89,7 @@ default = { solve-group = "default" }
 test = { features = ["test"], solve-group = "default" }
 
 [tool.pixi.tasks]
+
+[tool.pixi.feature.test.dependencies]
+ruff = ">=0.15.5,<0.16"
+ty = ">=0.0.21,<0.0.22"
