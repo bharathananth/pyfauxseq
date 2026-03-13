@@ -56,7 +56,7 @@ def generate_rhythmic_rnaseq(
         log2 fold), by default 1
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
         empirical mean (mu) and size (1/dispersion) values for a corpus of
-        genes or filenames of a file containing the dictionary, by default None
+        genes or name of a file containing the dictionary, by default None
         (read from mouse liver dataset)
     depth : int, optional
         average sequencing depth of different samples, by default 4e7
@@ -64,7 +64,7 @@ def generate_rhythmic_rnaseq(
         window of variability of sequencing depth of samples about 'depth',
         by default (0.8, 1.2)
     seed : int, optional
-        seed for all RNG in called function, by default None
+        seed to ensure reproducible datasets, by default None
 
     Returns
     -------
@@ -216,7 +216,7 @@ def generate_diffrhythmic_rnaseq(
         labels for the two groups/conditions, by default ("ctrl", "expt")
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
         empirical mean (mu) and size (1/dispersion) values for a corpus of
-        genes or filenames of a file containing the dictionary, by default None
+        genes or name of a file containing the dictionary, by default None
         (read from mouse liver dataset)
     depth : int, optional
         average sequencing depth of different samples, by default 4e7
@@ -224,7 +224,7 @@ def generate_diffrhythmic_rnaseq(
         window of variability of sequencing depth of samples about 'depth',
         by default (0.8, 1.2)
     seed : int, optional
-        seed for all RNG in called function, by default None
+        seed to ensure reproducible datasets, by default None
 
     Returns
     -------
