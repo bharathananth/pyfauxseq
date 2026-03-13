@@ -50,6 +50,9 @@ homepage = "https://github.com/bharathananth/pyfauxseq"
 # Example override: relax a rule for the entire project (uncomment if needed).
 # rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
 
+[tool.ty.src]
+exclude = ["tests"]
+
 [tool.ruff]
 line-length = 88
 
@@ -95,6 +98,8 @@ ruff = ">=0.15.5,<0.16"
 ty = ">=0.0.21,<0.0.22"
 ipykernel = ">=7.2.0,<8"
 pandas-stubs = ">=3.0.0.260204,<4"
+pytest = ">=9.0.2,<10"
+hypothesis = ">=6.151.9,<7"
 
 [tool.pixi.dependencies]
 mkdocs-material = ">=9.7.5,<10"

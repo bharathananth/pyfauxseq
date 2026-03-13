@@ -32,9 +32,9 @@ def generate_rhythmic_rnaseq(
 ) -> dict[str, pd.DataFrame]:
     """Generate synthetic rhythmic transcriptomic data in one condition.
 
-    This function generates count data with empirically-estimated
-    mean-dispersion relationships under one condition based on the generative
-    model of Soneson & Delorenz (2013) BMC Bioinfo.
+    This function generates artificial timeseries transcriptomic data under one
+    condition, with rhythmically expressed genes and empirically estimated
+    variability between replicates/samples.
 
     Parameters
     ----------
@@ -83,6 +83,16 @@ def generate_rhythmic_rnaseq(
         if file containing 'emp_dist' does not exist.
     ValueError
         if provided 'emp_dist' is invalid
+
+    Notes
+    -----
+    We extended generative of model of gene expression of Soneson & Delorenz
+    [SD]_ to also include rhythmic genes.
+
+    References
+    ----------
+    [SD] Soneson C, Delorenzi M. A comparison of methods for differential
+    expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.
     """
     rng: Generator = np.random.default_rng(seed)
 
@@ -184,9 +194,10 @@ def generate_diffrhythmic_rnaseq(
 ):
     """Generate synthetic rhythmic transcriptomic data in two conditions.
 
-    This function generates count data with empirically-estimated
-    mean-dispersion relationships under two conditions based on the generative
-    model of Soneson & Delorenz (2013) BMC Bioinfo.
+    This function generates artificial timeseries transcriptomic data under two
+    conditions, which includes both differentially rhythmic and differential
+    expressed genes, as well as empirically estimated variability between
+    replicates/samples.
 
     Parameters
     ----------
@@ -231,7 +242,7 @@ def generate_diffrhythmic_rnaseq(
     dictionary
         counts: pandas DataFrame (n_genes * n_samples * n_groups) with count
             data
-        params: pandas DataFrame (n_genes * 12) with identity of gene,
+        params: pandas DataFrame (n_genes * 7) with identity of gene,
             differential rhythmicity category, amplitude (A) in two groups, phases
             (phi) in the two groups, and DE effect size.
         exp_design: pandas DataFrame ((2*n_samples) * 2) with time labels for
@@ -245,6 +256,16 @@ def generate_diffrhythmic_rnaseq(
         if file containing 'emp_dist' does not exist.
     ValueError
         if provided 'emp_dist' is invalid
+
+    Notes
+    -----
+    We extended the generative of model of differential gene expression of
+    Soneson & Delorenz [SD]_ to also include differentially rhythmic genes.
+
+    References
+    ----------
+    [SD] Soneson C, Delorenzi M. A comparison of methods for differential
+    expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.
     """
     rng: Generator = np.random.default_rng(seed)
 
