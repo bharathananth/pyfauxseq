@@ -91,7 +91,7 @@ def generate_rhythmic_rnaseq(
 
     References
     ----------
-    [SD] Soneson C, Delorenzi M. A comparison of methods for differential
+    .. [SD] Soneson C, Delorenzi M. A comparison of methods for differential
     expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.
     """
     rng: Generator = np.random.default_rng(seed)
@@ -264,7 +264,7 @@ def generate_diffrhythmic_rnaseq(
 
     References
     ----------
-    [SD] Soneson C, Delorenzi M. A comparison of methods for differential
+    .. [SD] Soneson C, Delorenzi M. A comparison of methods for differential
     expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.
     """
     rng: Generator = np.random.default_rng(seed)
