@@ -1,0 +1,37 @@
+site_name: pyfauxseq
+site_description: A synthetic timeseries RNA-seq data generator
+repo_name: bharathananth/pyfauxseq
+repo_url: https://github.com/bharathananth/pyfauxseq
+copyright: 'Copyright &copy; Bharath Ananthasubramaniam 2026-present'
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - content.code.copy
+    - search.suggest
+  icon:
+    repo: fontawesome/brands/git-alt
+  palette:
+    primary: teal
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings: # Automatically pulls docstrings from your code
+      enable_inventory: true
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: numpy
+            modernize_annotations: true
+            show_signature: false
+            show_docstring_raises: false
+            show_root_full_path: false
+            show_root_heading: true
+            heading_level: 3
+
+nav:
+  - Home: index.md
+  - Getting Started: getting_started.md
+  - API Documentation: api_documentation.md
