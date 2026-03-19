@@ -1,7 +1,6 @@
 """Tests for `generate_diffrhythmic_rnaseq`."""
 
 import numpy as np
-import pytest as pt
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
