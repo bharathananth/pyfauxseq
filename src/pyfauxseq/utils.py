@@ -7,6 +7,7 @@ This module provides:
 - normalize_counts: to normalize count data using median of ratios
 - median_of_ratios: to estimate median of ratios for the samples
 """
+
 import importlib.resources
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -52,8 +53,9 @@ def drop_counts(y: NDArray, N: int) -> NDArray[np.int_]:
         return np.bincount(removed, minlength=y.shape[0])
 
 
-def downsample(counts: NDArray, parallel: bool=True, ncores: int |
-               None=None) -> NDArray[np.int_]:
+def downsample(
+    counts: NDArray, parallel: bool = True, ncores: int | None = None
+) -> NDArray[np.int_]:
     """Downsample multiple samples in parallel.
 
     Parameters
@@ -116,7 +118,7 @@ def load_dataset(filename: str) -> pd.DataFrame:
             raise ValueError("Unsupported file format")
 
 
-def normalize_counts(counts: pd.DataFrame, log: bool=True) -> pd.DataFrame:
+def normalize_counts(counts: pd.DataFrame, log: bool = True) -> pd.DataFrame:
     """Normalize counts using median of ratios with optional log transform.
 
     Parameters
@@ -131,8 +133,9 @@ def normalize_counts(counts: pd.DataFrame, log: bool=True) -> pd.DataFrame:
     pandas DataFrame
         normalized count data
     """
-    norm_counts: pd.DataFrame = counts / np.sum(counts, axis=0) / \
-        median_of_ratios(counts) * 1e6
+    norm_counts: pd.DataFrame = (
+        counts / np.sum(counts, axis=0) / median_of_ratios(counts) * 1e6
+    )
     if log:
         norm_counts: pd.DataFrame = np.log2(1 + norm_counts)
     return norm_counts
@@ -152,5 +155,7 @@ def median_of_ratios(counts: pd.DataFrame) -> NDArray:
         median of ratios
     """
     counts: NDArray = counts.to_numpy()
-    return 2 ** np.ma.median(np.ma.log2(counts) \
-        - np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True), axis=0)
+    return 2 ** np.ma.median(
+        np.ma.log2(counts) - np.ma.mean(np.ma.log2(counts), axis=1, keepdims=True),
+        axis=0,
+    )

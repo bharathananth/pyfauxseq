@@ -4,6 +4,7 @@ This module provides:
 - nb_fit: to fit negative binomial model to count data
 - estimate_disp_dist: to estimate dispersion of genes from multiple samples
 """
+
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from concurrent.futures._base import Future
@@ -56,9 +57,9 @@ def nb_fit(x: NDArray) -> pd.Series:
         return pd.Series({"size": np.nan, "mu": np.nan})
 
 
-def estimate_disp_dist(counts: NDArray,
-                       parallel: bool = True,
-                       ncores: int | None = None) -> pd.DataFrame:
+def estimate_disp_dist(
+    counts: NDArray, parallel: bool = True, ncores: int | None = None
+) -> pd.DataFrame:
     """Estimate mean and dispersion for all samples in data in parallel.
 
     Parameters

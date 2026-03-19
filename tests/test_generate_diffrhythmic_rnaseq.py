@@ -97,9 +97,8 @@ def test_params(n_genes, rhy_frac, min_A_effect, min_DE_effect):
         == params[params["category"] == "same"]["A_expt"]
     ).all()
 
-    assert (
-        not np.logical_xor(params["category"].isna(), params["A_ctrl"].isna()).any()
-    )
+    assert not np.logical_xor(params["category"].isna(), params["A_ctrl"].isna()).any()
+
 
 @given(st.integers(min_value=0, max_value=2**32 - 1))
 def test_seeding(seed):

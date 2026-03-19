@@ -36,7 +36,7 @@ test = [
     "pytest",  # testing
     "ruff",  # linting
     "ty", # checking types
-    "hypothesis", # for CBT 
+    "hypothesis", # for CBT
 ]
 docs = [
   "mkdocs",
@@ -73,6 +73,7 @@ exclude = ["tests"]
 
 [tool.ruff]
 line-length = 88
+extend-exclude = ["tests"]
 
 [tool.ruff.format]
 quote-style = "double"

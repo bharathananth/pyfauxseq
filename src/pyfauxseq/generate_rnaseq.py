@@ -4,6 +4,7 @@ This module currently provides:
 - generate_rhythmic_rnaseq: to generate data under one condition
 - generate_diffrhythmic_rnaseq: to generate data under two conditions
 """
+
 import errno
 import os
 
@@ -18,12 +19,12 @@ from .utils import load_dataset
 
 
 def generate_rhythmic_rnaseq(
-    t: ArrayLike=(0, 4, 8, 12, 16, 20),
+    t: ArrayLike = (0, 4, 8, 12, 16, 20),
     reps: int = 1,
     period: int = 24,
-    n_genes:int = 10000,
+    n_genes: int = 10000,
     rhy_frac: float = 0.1,
-    min_A_effect: float=0.5,
+    min_A_effect: float = 0.5,
     A_spread: float = 1,
     emp_dist: dict | str | None = None,
     depth: int = 40000000,
@@ -96,8 +97,8 @@ def generate_rhythmic_rnaseq(
     """
     rng: Generator = np.random.default_rng(seed)
 
-    if not isinstance(reps, int) and (not isinstance(reps, list) or
-                                      len(reps) != len(t)
+    if not isinstance(reps, int) and (
+        not isinstance(reps, list) or len(reps) != len(t)
     ):
         raise ValueError("Length of reps must be 1 or the same as length of t")
 
@@ -110,8 +111,9 @@ def generate_rhythmic_rnaseq(
                 grouped: DataFrameGroupBy = emp_dist.groupby(
                     by=list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
                 )
-                emp_dist: pd.DataFrame | pd.Series = \
-                    grouped.get_group(rng.choice(np.array(list(grouped.groups.keys()))))
+                emp_dist: pd.DataFrame | pd.Series = grouped.get_group(
+                    rng.choice(np.array(list(grouped.groups.keys())))
+                )
         else:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
     elif not isinstance(emp_dist, pd.DataFrame):
@@ -123,8 +125,9 @@ def generate_rhythmic_rnaseq(
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
 
-    A: NDArray = np.ones((n_genes,)) + min_A_effect +\
-                    rng.exponential(1 / A_spread, n_genes)
+    A: NDArray = (
+        np.ones((n_genes,)) + min_A_effect + rng.exponential(1 / A_spread, n_genes)
+    )
     A[~G_rhy] = 1.0
     phi: NDArray = rng.uniform(size=n_genes) * 2 * np.pi * G_rhy
     params: pd.DataFrame = pd.DataFrame(
@@ -135,10 +138,9 @@ def generate_rhythmic_rnaseq(
         }
     )
 
-    t_pattern: NDArray = np.cos(phi)[:, None] @ \
-                            np.cos(2 * np.pi * t[None, :] / period) + \
-                                np.sin(phi)[:, None] @ \
-                                    np.sin(2 * np.pi * t[None, :] / period)
+    t_pattern: NDArray = np.cos(phi)[:, None] @ np.cos(
+        2 * np.pi * t[None, :] / period
+    ) + np.sin(phi)[:, None] @ np.sin(2 * np.pi * t[None, :] / period)
 
     lib_size_fct: NDArray = rng.uniform(lib_size_var[0], lib_size_var[1], N)
     lib_size: NDArray = lib_size_fct * depth
@@ -152,8 +154,9 @@ def generate_rhythmic_rnaseq(
 
     mu: NDArray = lambda_ / (np.sum(lambda_, axis=0) / lib_size)
 
-    counts: NDArray[np.int_] = nbinom.rvs(n=size, p=size / (mu + size),
-                                          random_state=seed)
+    counts: NDArray[np.int_] = nbinom.rvs(
+        n=size, p=size / (mu + size), random_state=seed
+    )
 
     exp_design = pd.DataFrame(
         {
@@ -176,7 +179,7 @@ def generate_rhythmic_rnaseq(
 
 
 def generate_diffrhythmic_rnaseq(
-    t: ArrayLike =(0, 4, 8, 12, 16, 20),
+    t: ArrayLike = (0, 4, 8, 12, 16, 20),
     reps: int = 1,
     period: int = 24,
     n_genes: int = 10000,
@@ -186,7 +189,7 @@ def generate_diffrhythmic_rnaseq(
     DE_frac: float = 0.1,
     min_DE_effect: float = 0.5,
     DE_spread: float = 1,
-    groups: tuple[str, str]=("ctrl", "expt"),
+    groups: tuple[str, str] = ("ctrl", "expt"),
     emp_dist: pd.DataFrame | str | None = None,
     depth: int = 40000000,
     lib_size_var: tuple[float, float] = (0.8, 1.2),
@@ -283,9 +286,9 @@ def generate_diffrhythmic_rnaseq(
                 grouped: DataFrameGroupBy = emp_dist.groupby(
                     by=list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
                 )
-                emp_dist: pd.DataFrame | pd.Series = \
-                    grouped.get_group(rng.choice(
-                        np.array(list(grouped.groups.keys()))))
+                emp_dist: pd.DataFrame | pd.Series = grouped.get_group(
+                    rng.choice(np.array(list(grouped.groups.keys())))
+                )
         else:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
     elif not isinstance(emp_dist, pd.DataFrame):
@@ -295,8 +298,9 @@ def generate_diffrhythmic_rnaseq(
     N: int = len(t)
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
-    DR_groups: NDArray = rng.choice(["gain", "loss", "change", "same"],
-                                    sum(G_rhy), replace=True)
+    DR_groups: NDArray = rng.choice(
+        ["gain", "loss", "change", "same"], sum(G_rhy), replace=True
+    )
     A: NDArray = (
         np.ones((n_genes, 2))
         + min_A_effect
@@ -325,8 +329,14 @@ def generate_diffrhythmic_rnaseq(
             "phi_2": phi[G_rhy, 1],
         }
     )
-    params.columns: list[str] = ["id", "category", "A_ctrl", "A_expt",
-                                 "phi_ctrl", "phi_expt"]
+    params.columns: list[str] = [
+        "id",
+        "category",
+        "A_ctrl",
+        "A_expt",
+        "phi_ctrl",
+        "phi_expt",
+    ]
 
     t_pattern: NDArray = np.hstack(
         [
@@ -349,8 +359,9 @@ def generate_diffrhythmic_rnaseq(
         }
     )
 
-    params: pd.DataFrame = pd.merge(params, params_de, on="id",
-                                    how="outer", validate="one_to_one")
+    params: pd.DataFrame = pd.merge(
+        params, params_de, on="id", how="outer", validate="one_to_one"
+    )
 
     lib_size_fct: NDArray = rng.uniform(lib_size_var[0], lib_size_var[1], 2 * N)
     lib_size: NDArray = lib_size_fct * depth

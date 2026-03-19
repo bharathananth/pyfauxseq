@@ -1,1 +1,1 @@
-"""Unit test package for pyfauxseq."""
+"""Property based tests for pyfauxseq."""

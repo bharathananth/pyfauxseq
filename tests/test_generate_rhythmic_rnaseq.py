@@ -1,4 +1,4 @@
-"""Tests for `generate_rhythmic_rnaseq`."""
+"""Tests for `generate_diffrhythmic_rnaseq`."""
 
 import numpy as np
 import pytest as pt

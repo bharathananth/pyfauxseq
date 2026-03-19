@@ -4113,7 +4113,7 @@ packages:
 - pypi: ./
   name: pyfauxseq
   version: 0.1.0
-  sha256: b5b18dd464cc2cf9462e06ebd1f3b79363c47dc0a48a377e726f2c5c99e27482
+  sha256: ffd75a2f5ff0bec63f95b28433a98afec3868554ef610c9a3edcefc41d878bf6
   requires_dist:
   - numpy
   - scipy
