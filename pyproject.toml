@@ -1,37 +1,34 @@
 [project]
 name = "pyfauxseq"
 version = "0.1.0"
-description = "This package generates synthetic rhythmic timeseries RNAseq datasets."
-readme = "README.md"
+description = "This package can generate synthetic timeseries RNA-seq data with a fraction of rhythmic genes and empirical relationship between mean expression and variability across replicates of genes."
+readme = {"file" = "README.md", "content-type" = "text/markdown"}
+requires-python = ">= 3.10"
+license = "MIT"
 authors = [
   {name = "Bharath Ananthasubramaniam", email = "bharath.ananthasubramaniam@hu-berlin.de"}
 ]
 maintainers = [
   {name = "Bharath Ananthasubramaniam", email = "bharath.ananthasubramaniam@hu-berlin.de"}
 ]
+keywords = []
 classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
   "Operating System :: OS Independent",
-  "Intended Audience :: Science/Research"
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Healthcare Industry",
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: MIT License"
 ]
-license = "MIT"
 dependencies = [
   "numpy",
   "scipy",
-  "pandas", 
-  "mkdocs-execute-plugin>=0.0.9,<0.0.10", "build>=1.4.0,<2"]
-requires-python = ">= 3.10"
+  "pandas"]
 
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-pyfauxseq = ["data/*.csv.gz"]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project.optional-dependencies]
 test = [
@@ -39,14 +36,32 @@ test = [
     "pytest",  # testing
     "ruff",  # linting
     "ty", # checking types
-    "ipdb", # debugging
+    "hypothesis", # for CBT 
+]
+docs = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocstrings-python"
 ]
 
 [project.urls]
 bugs = "https://github.com/bharathananth/pyfauxseq/issues"
-changelog = "https://github.com/bharathananth/pyfauxseq/blob/master/changelog.md"
 homepage = "https://github.com/bharathananth/pyfauxseq"
+documentation = "https://bharathananth.github.io/pypfauxseq"
 
+[tool.hatch.build.targets.sdist]
+# Hatchling includes README, LICENSE, and pyproject.toml by default.
+include = [
+  "/CONTRIBUTING.md",
+  "/HISTORY.md",
+  "/docs",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyfauxseq"]
+
+[tool.hatch.envs.default]
+installer = "uv"
 
 [tool.ty]
 # All rules are enabled as "error" by default; no need to specify unless overriding.
@@ -109,3 +124,6 @@ twine = ">=6.2.0,<7"
 mkdocs-material = ">=9.7.5,<10"
 mkdocstrings-python = ">=2.0.2,<3"
 mkdocs = "<2.0.0"
+
+[dependency-groups]
+test = ["validate-pyproject[all]>=0.25,<0.26"]

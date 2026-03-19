@@ -1,0 +1,22 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: pyfauxseq
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Bharath
+    family-names: Ananthasubramaniam
+    email: bharath.ananthasubramaniam@hu-berlin.de
+    affiliation: Humboldt-Universität zu Berlin
+    orcid: 'https://orcid.org/0000-0003-4467-1546'
+repository-code: 'https://github.com/bharathananth/pyfauxseq'
+abstract: >-
+  This package can generate synthetic timeseries RNA-seq
+  data with a fraction of rhythmic genes and empirical
+  relationship between mean expression and variability
+  across replicates of genes.
+license: MIT
