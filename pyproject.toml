@@ -109,22 +109,21 @@ pyfauxseq = { path = ".", editable = true }
 [tool.pixi.environments]
 default = { solve-group = "default" }
 test = { features = ["test"], solve-group = "default" }
+dev = { features = ["docs", "lint", "test"], solve-group = "default" }
 
 [tool.pixi.tasks]
 
 [tool.pixi.feature.test.dependencies]
-ruff = ">=0.15.5,<0.16"
-ty = ">=0.0.21,<0.0.22"
-ipykernel = ">=7.2.0,<8"
-pandas-stubs = ">=3.0.0.260204,<4"
 pytest = ">=9.0.2,<10"
 hypothesis = ">=6.151.9,<7"
-twine = ">=6.2.0,<7"
 
-[tool.pixi.dependencies]
-mkdocs-material = ">=9.7.5,<10"
-mkdocstrings-python = ">=2.0.2,<3"
+[tool.pixi.feature.docs.dependencies]
 mkdocs = "<2.0.0"
+mkdocs-material = "*"
+mkdocstrings-python = "*"
 
-[dependency-groups]
-test = ["validate-pyproject[all]>=0.25,<0.26"]
+[tool.pixi.feature.lint.dependencies]
+ruff = "*"
+ty = "*"
+pandas-stubs = "*"
+validate-pyproject = ">=0.25,<0.26"

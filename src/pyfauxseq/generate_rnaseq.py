@@ -31,7 +31,7 @@ def generate_rhythmic_rnaseq(
     lib_size_var: tuple[float, float] = (0.8, 1.2),
     seed=None,
 ) -> dict[str, pd.DataFrame]:
-    """Generate synthetic rhythmic transcriptomic data in one condition.
+    """Generate synthetic rhythmic RNA-seq count data in one condition.
 
     This function generates artificial timeseries transcriptomic data under one
     condition, with rhythmically expressed genes and empirically estimated
@@ -195,7 +195,7 @@ def generate_diffrhythmic_rnaseq(
     lib_size_var: tuple[float, float] = (0.8, 1.2),
     seed=None,
 ):
-    """Generate synthetic rhythmic transcriptomic data in two conditions.
+    """Generate synthetic rhythmic RNA-seq count data in two conditions.
 
     This function generates artificial timeseries transcriptomic data under two
     conditions, which includes both differentially rhythmic and differential
@@ -217,14 +217,14 @@ def generate_diffrhythmic_rnaseq(
         fraction of genes that are rhythmic, by default 0.1
     min_A_effect : float, optional
         minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5
-    A_spread : int, optional
+    A_spread : float, optional
         mean of the exponential distribution of rhythmic gene amplitudes (in
         log2 fold), by default 1
     DE_frac : float, optional
         fraction of differentially expressed (DE) genes, by default 0.1
     min_DE_effect : float, optional
         minimum log2 fold change in expression of DE genes, by default 0.5
-    DE_spread : int, optional
+    DE_spread : float, optional
         mean of the exponential distribution of DE fold changes, by default 1
     groups : tuple, optional
         labels for the two groups/conditions, by default ("ctrl", "expt")
