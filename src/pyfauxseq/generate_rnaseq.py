@@ -184,6 +184,7 @@ def generate_diffrhythmic_rnaseq(
     period: int = 24,
     n_genes: int = 10000,
     rhy_frac: float = 0.1,
+    DR_probs: ArrayLike = (1.25, 1.25, 1.25, 1.25),
     min_A_effect: float = 0.5,
     A_spread: float = 1,
     DE_frac: float = 0.1,
@@ -215,6 +216,11 @@ def generate_diffrhythmic_rnaseq(
         number of genes in the dataset, by default 10000
     rhy_frac : float, optional
         fraction of genes that are rhythmic, by default 0.1
+    DR_probs : numpy array, optional
+        determines the relative average number of ("same", "gain", "loss",
+        "change") group elements. The larger the numbers, more concentrated are
+        the actual numbers around the averages, by default (1.25, 1.25, 1.25,
+        1.25)
     min_A_effect : float, optional
         minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5
     A_spread : float, optional
@@ -298,9 +304,12 @@ def generate_diffrhythmic_rnaseq(
     N: int = len(t)
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
-    DR_groups: NDArray = rng.choice(
-        ["gain", "loss", "change", "same"], sum(G_rhy), replace=True
-    )
+    prior_p = rng.gamma(DR_probs, 1.0, 4)
+    prior_p = prior_p / prior_p.sum()
+    DR_counts = rng.multinomial(G_rhy.sum(), prior_p, 1).squeeze()
+    DR_classes = np.array(["gain", "loss", "change", "same"])
+    DR_groups: NDArray = DR_classes[np.repeat(np.arange(4), DR_counts)]
+
     A: NDArray = (
         np.ones((n_genes, 2))
         + min_A_effect

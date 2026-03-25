@@ -116,6 +116,7 @@ dev = { features = ["docs", "lint", "test"], solve-group = "default" }
 [tool.pixi.feature.test.dependencies]
 pytest = ">=9.0.2,<10"
 hypothesis = ">=6.151.9,<7"
+ipython = ">=9.11.0,<10"
 
 [tool.pixi.feature.docs.dependencies]
 mkdocs = "<2.0.0"
