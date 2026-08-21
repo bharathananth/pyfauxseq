@@ -125,9 +125,7 @@ def generate_rhythmic_rnaseq(
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
 
-    A: NDArray = (
-        np.ones((n_genes,)) + min_A_effect + rng.exponential(1 / A_spread, n_genes)
-    )
+    A: NDArray = np.ones((n_genes,)) + min_A_effect + rng.exponential(A_spread, n_genes)
     A[~G_rhy] = 1.0
     phi: NDArray = rng.uniform(size=n_genes) * 2 * np.pi * G_rhy
     params: pd.DataFrame = pd.DataFrame(
@@ -311,9 +309,7 @@ def generate_diffrhythmic_rnaseq(
     DR_groups: NDArray = DR_classes[np.repeat(np.arange(4), DR_counts)]
 
     A: NDArray = (
-        np.ones((n_genes, 2))
-        + min_A_effect
-        + rng.exponential(1 / A_spread, (n_genes, 2))
+        np.ones((n_genes, 2)) + min_A_effect + rng.exponential(A_spread, (n_genes, 2))
     )
     A[~G_rhy, :] = 1.0
     phi: NDArray = rng.uniform(size=(n_genes, 2)) * 2 * np.pi * G_rhy.reshape(-1, 1)
@@ -358,7 +354,7 @@ def generate_diffrhythmic_rnaseq(
 
     G_DE: NDArray = rng.uniform(size=n_genes) <= DE_frac
     DE_effects: NDArray = (
-        1 + min_DE_effect + rng.exponential(1 / DE_spread, n_genes)
+        1 + min_DE_effect + rng.exponential(DE_spread, n_genes)
     ) ** np.sign(2 * rng.uniform(size=n_genes) - 1)
     DE_effects[~G_DE] = 1.0
     params_de = pd.DataFrame(
