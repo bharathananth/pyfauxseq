@@ -112,6 +112,7 @@ test = { features = ["test"], solve-group = "default" }
 dev = { features = ["docs", "lint", "test"], solve-group = "default" }
 
 [tool.pixi.tasks]
+test = { cmd = "pytest", default-environment = "test" }
 
 [tool.pixi.feature.test.dependencies]
 pytest = ">=9.0.2,<10"
