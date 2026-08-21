@@ -30,8 +30,6 @@ jobs:
       with:
         pixi-version: v0.66.0
         cache: true
-        auth-host: prefix.dev
-        auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
 
     - name: Run tests via Pixi
       run: pixi run test
