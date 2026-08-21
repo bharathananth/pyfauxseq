@@ -4,8 +4,6 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/pyfauxseq)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyfauxseq)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/bharathananth/pyfauxseq/total)
-![Codecov](https://img.shields.io/codecov/c/github/bharathananth/pyfauxseq)
-
 
 ## What pyfauxseq does
 

@@ -14,7 +14,6 @@ hide:
 [![Build Status](https://github.com/bharathananth/pyfauxseq/actions/workflows/tests.yml/badge.svg)](https://github.com/bharathananth/pyfauxseq/actions)
 [![codecov](https://codecov.io/gh/bharathananth/pyfauxseq/branch/main/graph/badge.svg)](https://codecov.io/gh/bharathananth/pyfauxseq)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Docs](https://github.com/bharathananth/pyfauxseq/actions/workflows/ci.yml/badge.svg)](https://bharathananth.github.io/pyfauxseq/)
 
 ## Why **pyfauxseq**?
 `pyfauxseq` and its R sister `fauxseq` arose out of a desire to systematically compare methods comparing temporal changes in gene expression in one or two conditions. This package delivers real-world like RNAseq data with ground truth to help with benchmarking and method development.
