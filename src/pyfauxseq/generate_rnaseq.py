@@ -125,7 +125,9 @@ def generate_rhythmic_rnaseq(
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
 
-    A: NDArray = np.ones((n_genes,)) + min_A_effect + rng.exponential(A_spread, n_genes)
+    A: NDArray = np.ones((n_genes,)) + (
+        min_A_effect + rng.exponential(A_spread, n_genes)
+    ) * np.log(2)
     A[~G_rhy] = 1.0
     phi: NDArray = rng.uniform(size=n_genes) * 2 * np.pi * G_rhy
     params: pd.DataFrame = pd.DataFrame(
