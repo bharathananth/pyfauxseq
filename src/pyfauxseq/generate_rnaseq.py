@@ -122,18 +122,19 @@ def generate_rhythmic_rnaseq(
     t: NDArray = np.array(t)
     t: NDArray = np.repeat(t, reps)
     N: int = len(t)
+    # min_A_effect: float = min_A_effect * np.log(2)
+    # A_spread: float = A_spread * np.log(2)
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
 
-    A: NDArray = np.ones((n_genes,)) + (
-        min_A_effect + rng.exponential(A_spread, n_genes)
-    ) * np.log(2)
-    A[~G_rhy] = 1.0
+    A: NDArray = min_A_effect + rng.exponential(A_spread, n_genes)
+
+    A[~G_rhy] = 0.0
     phi: NDArray = rng.uniform(size=n_genes) * 2 * np.pi * G_rhy
     params: pd.DataFrame = pd.DataFrame(
         {
             "id": [f"g{i + 1}" for i in np.where(G_rhy)[0]],
-            "A": np.log2(A[G_rhy]),
+            "A": A[G_rhy],
             "phi": phi[G_rhy],
         }
     )
@@ -150,7 +151,7 @@ def generate_rhythmic_rnaseq(
 
     size: NDArray = emp_dist["size"].values[draw].reshape(-1, 1)
 
-    lambda_: NDArray = np.repeat(lambda_, N, axis=1) * A[:, None] ** t_pattern
+    lambda_: NDArray = np.repeat(lambda_, N, axis=1) * 2 ** (A[:, None] * t_pattern)
 
     mu: NDArray = lambda_ / (np.sum(lambda_, axis=0) / lib_size)
 

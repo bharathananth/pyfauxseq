@@ -69,7 +69,7 @@ def test_params(n_genes, rhy_frac, min_A_effect):
     )
     assert data["params"].shape[0] / n_genes == pt.approx(rhy_frac, abs=0.1)
     assert data["params"]["id"].isin(data["counts"].index.to_list()).all()
-    assert (data["params"]["A"] >= np.log2(1 + min_A_effect*np.log(2))).all()
+    assert (data["params"]["A"] >= min_A_effect).all()
     assert (data["params"]["phi"] >= 0).all() and (
         data["params"]["phi"] <= 2 * np.pi
     ).all()
