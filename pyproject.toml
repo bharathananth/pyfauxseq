@@ -109,7 +109,7 @@ pyfauxseq = { path = ".", editable = true }
 [tool.pixi.environments]
 default = { solve-group = "default" }
 test = { features = ["test"], solve-group = "default" }
-dev = { features = ["docs", "lint", "test"], solve-group = "default" }
+dev = ["docs", "lint", "test", "usage"]
 
 [tool.pixi.tasks]
 test = { cmd = "pytest", default-environment = "test" }
@@ -129,3 +129,17 @@ ruff = "*"
 ty = "*"
 pandas-stubs = "*"
 validate-pyproject = ">=0.25,<0.26"
+
+[tool.pixi.feature.usage.dependencies]
+matplotlib = "*"
+numpy = "*"
+scipy = "*"
+ipython = ">=9.16.1,<10"
+jupyter = ">=1.1.1,<2"
+notebook = ">=7.6.2,<8"
+ipykernel = ">=7.3.0,<8"
+anndata = ">=0.13.2,<0.14"
+nbstripout = ">=0.9.1,<0.10"
+
+[dependency-groups]
+usage = ["pydeseq2"]
