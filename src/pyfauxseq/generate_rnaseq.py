@@ -186,11 +186,11 @@ def generate_diffrhythmic_rnaseq(
     n_genes: int = 10000,
     rhy_frac: float = 0.1,
     DR_probs: ArrayLike = (1.25, 1.25, 1.25, 1.25),
-    min_A_effect: float = 0.5,
-    A_spread: float = 1,
+    min_A_effect: float = 0.2,
+    A_spread: float = 0.5,
     DE_frac: float = 0.1,
     min_DE_effect: float = 0.5,
-    DE_spread: float = 1,
+    DE_spread: float = 0.5,
     groups: tuple[str, str] = ("ctrl", "expt"),
     emp_dist: pd.DataFrame | str | None = None,
     depth: int = 40000000,
@@ -223,16 +223,16 @@ def generate_diffrhythmic_rnaseq(
         the actual numbers around the averages, by default (1.25, 1.25, 1.25,
         1.25)
     min_A_effect : float, optional
-        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5
+        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2
     A_spread : float, optional
         mean of the exponential distribution of rhythmic gene amplitudes (in
-        log2 fold), by default 1
+        log2 fold), by default 0.5
     DE_frac : float, optional
         fraction of differentially expressed (DE) genes, by default 0.1
     min_DE_effect : float, optional
         minimum log2 fold change in expression of DE genes, by default 0.5
     DE_spread : float, optional
-        mean of the exponential distribution of DE fold changes, by default 1.0
+        mean of the exponential distribution of DE fold changes, by default 0.5
     groups : tuple, optional
         labels for the two groups/conditions, by default ("ctrl", "expt")
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
