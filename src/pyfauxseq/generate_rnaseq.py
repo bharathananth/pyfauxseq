@@ -356,7 +356,7 @@ def generate_diffrhythmic_rnaseq(
     G_DE: NDArray = rng.uniform(size=n_genes) <= DE_frac
     DE_effects: NDArray = (
         min_DE_effect + rng.exponential(DE_spread, n_genes)
-    ) ** np.sign(2 * rng.uniform(size=n_genes) - 1)
+    ) * np.sign(2 * rng.uniform(size=n_genes) - 1)
     DE_effects[~G_DE] = 0.0
     params_de = pd.DataFrame(
         {

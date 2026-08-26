@@ -72,7 +72,7 @@ def test_params(n_genes, rhy_frac, min_A_effect, min_DE_effect):
     assert params["category"].isin(["loss", "gain", "change", "same", np.nan]).all()
     assert params["id"].isin(data["counts"].index.to_list()).all()
 
-    assert (params["DE_effect"].dropna().abs() >= np.log2(1 + min_DE_effect)).all()
+    assert (params["DE_effect"].dropna().abs() >= min_DE_effect).all()
 
     assert (params["phi_ctrl"].dropna() >= 0).all() and (
         params["phi_ctrl"].dropna() <= 2 * np.pi
@@ -82,15 +82,15 @@ def test_params(n_genes, rhy_frac, min_A_effect, min_DE_effect):
     ).all()
 
     assert (
-        params[params["category"] == "loss"]["A_ctrl"] >= np.log2(1 + min_A_effect)
+        params[params["category"] == "loss"]["A_ctrl"] >= min_A_effect
     ).all() and (params[params["category"] == "loss"]["A_expt"] == 0.0).all()
     assert (
-        params[params["category"] == "gain"]["A_expt"] >= np.log2(1 + min_A_effect)
+        params[params["category"] == "gain"]["A_expt"] >= min_A_effect
     ).all() and (params[params["category"] == "gain"]["A_ctrl"] == 0.0).all()
     assert (
-        params[params["category"] == "change"]["A_expt"] >= np.log2(1 + min_A_effect)
+        params[params["category"] == "change"]["A_expt"] >= min_A_effect
     ).all() and (
-        params[params["category"] == "change"]["A_ctrl"] >= np.log2(1 + min_A_effect)
+        params[params["category"] == "change"]["A_ctrl"] >= min_A_effect
     ).all()
     assert (
         params[params["category"] == "same"]["A_ctrl"]
