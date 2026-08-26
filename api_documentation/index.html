@@ -638,11 +638,11 @@ variability between replicates/samples.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5</p>
+                <p>minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2</p>
               </div>
             </td>
             <td>
-                  <code>0.5</code>
+                  <code>0.2</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -655,11 +655,11 @@ variability between replicates/samples.</p>
             <td>
               <div class="doc-md-description">
                 <p>mean of the exponential distribution of rhythmic gene amplitudes (in
-log2 fold), by default 1</p>
+log2 fold), by default 0.5</p>
               </div>
             </td>
             <td>
-                  <code>1</code>
+                  <code>0.5</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -929,14 +929,17 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="normal">173</span>
 <span class="normal">174</span>
 <span class="normal">175</span>
-<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_rhythmic_rnaseq</span><span class="p">(</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_rhythmic_rnaseq</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
     <span class="n">reps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
     <span class="n">n_genes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="n">rhy_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-    <span class="n">min_A_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">A_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">min_A_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">A_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">emp_dist</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40000000</span><span class="p">,</span>
     <span class="n">lib_size_var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span>
@@ -962,10 +965,10 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="sd">    rhy_frac : float, optional</span>
 <span class="sd">        fraction of genes that are rhythmic, by default 0.1</span>
 <span class="sd">    min_A_effect : float, optional</span>
-<span class="sd">        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5</span>
+<span class="sd">        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2</span>
 <span class="sd">    A_spread : int, optional</span>
 <span class="sd">        mean of the exponential distribution of rhythmic gene amplitudes (in</span>
-<span class="sd">        log2 fold), by default 1</span>
+<span class="sd">        log2 fold), by default 0.5</span>
 <span class="sd">    emp_dist : dictionary with keys &#39;mu&#39; and &#39;size&#39;| str, optional</span>
 <span class="sd">        empirical mean (mu) and size (1/dispersion) values for a corpus of</span>
 <span class="sd">        genes or name of a file containing the dictionary, by default None</span>
@@ -1033,16 +1036,19 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
     <span class="n">t</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">reps</span><span class="p">)</span>
     <span class="n">N</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="c1"># min_A_effect: float = min_A_effect * np.log(2)</span>
+    <span class="c1"># A_spread: float = A_spread * np.log(2)</span>
 
     <span class="n">G_rhy</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rhy_frac</span>
 
-    <span class="n">A</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_genes</span><span class="p">,))</span> <span class="o">+</span> <span class="n">min_A_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">A_spread</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">)</span>
-    <span class="n">A</span><span class="p">[</span><span class="o">~</span><span class="n">G_rhy</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">A</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">min_A_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">A_spread</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">)</span>
+
+    <span class="n">A</span><span class="p">[</span><span class="o">~</span><span class="n">G_rhy</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">phi</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">G_rhy</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;g</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">G_rhy</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
-            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">]),</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">],</span>
             <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="n">phi</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">],</span>
         <span class="p">}</span>
     <span class="p">)</span>
@@ -1059,7 +1065,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
     <span class="n">size</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">draw</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">lambda_</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">**</span> <span class="n">t_pattern</span>
+    <span class="n">lambda_</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">A</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">t_pattern</span><span class="p">)</span>
 
     <span class="n">mu</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">lambda_</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">lib_size</span><span class="p">)</span>
 
@@ -1294,7 +1300,7 @@ log2 fold), by default 1</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>mean of the exponential distribution of DE fold changes, by default 1</p>
+                <p>mean of the exponential distribution of DE fold changes, by default 1.0</p>
               </div>
             </td>
             <td>
@@ -1431,10 +1437,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src/pyfauxseq/generate_rnaseq.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
-<span class="normal">180</span>
-<span class="normal">181</span>
-<span class="normal">182</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">182</span>
 <span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
@@ -1659,8 +1662,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="normal">404</span>
 <span class="normal">405</span>
 <span class="normal">406</span>
-<span class="normal">407</span>
-<span class="normal">408</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_diffrhythmic_rnaseq</span><span class="p">(</span>
+<span class="normal">407</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_diffrhythmic_rnaseq</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
     <span class="n">reps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
@@ -1713,7 +1715,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="sd">    min_DE_effect : float, optional</span>
 <span class="sd">        minimum log2 fold change in expression of DE genes, by default 0.5</span>
 <span class="sd">    DE_spread : float, optional</span>
-<span class="sd">        mean of the exponential distribution of DE fold changes, by default 1</span>
+<span class="sd">        mean of the exponential distribution of DE fold changes, by default 1.0</span>
 <span class="sd">    groups : tuple, optional</span>
 <span class="sd">        labels for the two groups/conditions, by default (&quot;ctrl&quot;, &quot;expt&quot;)</span>
 <span class="sd">    emp_dist : dictionary with keys &#39;mu&#39; and &#39;size&#39;| str, optional</span>
@@ -1792,18 +1794,16 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
     <span class="n">DR_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">])</span>
     <span class="n">DR_groups</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">DR_classes</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">DR_counts</span><span class="p">)]</span>
 
-    <span class="n">A</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_genes</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">min_A_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">A_spread</span><span class="p">,</span> <span class="p">(</span><span class="n">n_genes</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="p">)</span>
-    <span class="n">A</span><span class="p">[</span><span class="o">~</span><span class="n">G_rhy</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">A</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">min_A_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">A_spread</span><span class="p">,</span> <span class="p">(</span><span class="n">n_genes</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">A</span><span class="p">[</span><span class="o">~</span><span class="n">G_rhy</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">phi</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_genes</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">G_rhy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">G_rhy_index</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">G_rhy</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">DR_groups</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">DR_groups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;gain&quot;</span><span class="p">:</span>
-            <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">elif</span> <span class="n">DR_groups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;loss&quot;</span><span class="p">:</span>
-            <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">elif</span> <span class="n">DR_groups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;same&quot;</span><span class="p">:</span>
             <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span>
             <span class="n">phi</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">G_rhy_index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span>
@@ -1812,8 +1812,8 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
         <span class="p">{</span>
             <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;g</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">G_rhy</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
             <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="n">DR_groups</span><span class="p">,</span>
-            <span class="s2">&quot;A_1&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
-            <span class="s2">&quot;A_2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+            <span class="s2">&quot;A_1&quot;</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;A_2&quot;</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
             <span class="s2">&quot;phi_1&quot;</span><span class="p">:</span> <span class="n">phi</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
             <span class="s2">&quot;phi_2&quot;</span><span class="p">:</span> <span class="n">phi</span><span class="p">[</span><span class="n">G_rhy</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
         <span class="p">}</span>
@@ -1838,13 +1838,13 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
     <span class="n">G_DE</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">DE_frac</span>
     <span class="n">DE_effects</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="mi">1</span> <span class="o">+</span> <span class="n">min_DE_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">DE_spread</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">)</span>
-    <span class="p">)</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">DE_effects</span><span class="p">[</span><span class="o">~</span><span class="n">G_DE</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">min_DE_effect</span> <span class="o">+</span> <span class="n">rng</span><span class="o">.</span><span class="n">exponential</span><span class="p">(</span><span class="n">DE_spread</span><span class="p">,</span> <span class="n">n_genes</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DE_effects</span><span class="p">[</span><span class="o">~</span><span class="n">G_DE</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">params_de</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;g</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">G_DE</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span>
-            <span class="s2">&quot;DE_effect&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">DE_effects</span><span class="p">[</span><span class="n">G_DE</span><span class="p">]),</span>
+            <span class="s2">&quot;DE_effect&quot;</span><span class="p">:</span> <span class="n">DE_effects</span><span class="p">[</span><span class="n">G_DE</span><span class="p">],</span>
         <span class="p">}</span>
     <span class="p">)</span>
 
@@ -1863,10 +1863,8 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
     <span class="n">DE_effects</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_genes</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">DE_effects</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
 
-    <span class="n">lambda_</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="o">*</span> <span class="n">DE_effects</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)]</span>
-        <span class="o">*</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)]</span> <span class="o">**</span> <span class="n">t_pattern</span>
+    <span class="n">lambda_</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span>
+        <span class="n">DE_effects</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">N</span><span class="p">)]</span> <span class="o">*</span> <span class="n">t_pattern</span>
     <span class="p">)</span>
 
     <span class="n">mu</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">lambda_</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">lib_size</span><span class="p">)</span>
