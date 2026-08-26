@@ -24,8 +24,8 @@ def generate_rhythmic_rnaseq(
     period: int = 24,
     n_genes: int = 10000,
     rhy_frac: float = 0.1,
-    min_A_effect: float = 0.5,
-    A_spread: float = 1,
+    min_A_effect: float = 0.2,
+    A_spread: float = 0.5,
     emp_dist: dict | str | None = None,
     depth: int = 40000000,
     lib_size_var: tuple[float, float] = (0.8, 1.2),
@@ -51,10 +51,10 @@ def generate_rhythmic_rnaseq(
     rhy_frac : float, optional
         fraction of genes that are rhythmic, by default 0.1
     min_A_effect : float, optional
-        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5
+        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2
     A_spread : int, optional
         mean of the exponential distribution of rhythmic gene amplitudes (in
-        log2 fold), by default 1
+        log2 fold), by default 0.5
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
         empirical mean (mu) and size (1/dispersion) values for a corpus of
         genes or name of a file containing the dictionary, by default None
@@ -232,7 +232,7 @@ def generate_diffrhythmic_rnaseq(
     min_DE_effect : float, optional
         minimum log2 fold change in expression of DE genes, by default 0.5
     DE_spread : float, optional
-        mean of the exponential distribution of DE fold changes, by default 1
+        mean of the exponential distribution of DE fold changes, by default 1.0
     groups : tuple, optional
         labels for the two groups/conditions, by default ("ctrl", "expt")
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
@@ -311,18 +311,16 @@ def generate_diffrhythmic_rnaseq(
     DR_classes = np.array(["gain", "loss", "change", "same"])
     DR_groups: NDArray = DR_classes[np.repeat(np.arange(4), DR_counts)]
 
-    A: NDArray = (
-        np.ones((n_genes, 2)) + min_A_effect + rng.exponential(A_spread, (n_genes, 2))
-    )
-    A[~G_rhy, :] = 1.0
+    A: NDArray = min_A_effect + rng.exponential(A_spread, (n_genes, 2))
+    A[~G_rhy, :] = 0.0
     phi: NDArray = rng.uniform(size=(n_genes, 2)) * 2 * np.pi * G_rhy.reshape(-1, 1)
 
     G_rhy_index: NDArray = np.where(G_rhy)[0]
     for i in range(len(DR_groups)):
         if DR_groups[i] == "gain":
-            A[G_rhy_index[i], 0] = 1.0
+            A[G_rhy_index[i], 0] = 0.0
         elif DR_groups[i] == "loss":
-            A[G_rhy_index[i], 1] = 1.0
+            A[G_rhy_index[i], 1] = 0.0
         elif DR_groups[i] == "same":
             A[G_rhy_index[i], 0] = A[G_rhy_index[i], 1]
             phi[G_rhy_index[i], 0] = phi[G_rhy_index[i], 1]
@@ -331,8 +329,8 @@ def generate_diffrhythmic_rnaseq(
         {
             "id": [f"g{i + 1}" for i in np.where(G_rhy)[0]],
             "category": DR_groups,
-            "A_1": np.log2(A[G_rhy, 0]),
-            "A_2": np.log2(A[G_rhy, 1]),
+            "A_1": A[G_rhy, 0],
+            "A_2": A[G_rhy, 1],
             "phi_1": phi[G_rhy, 0],
             "phi_2": phi[G_rhy, 1],
         }
@@ -357,13 +355,13 @@ def generate_diffrhythmic_rnaseq(
 
     G_DE: NDArray = rng.uniform(size=n_genes) <= DE_frac
     DE_effects: NDArray = (
-        1 + min_DE_effect + rng.exponential(DE_spread, n_genes)
+        min_DE_effect + rng.exponential(DE_spread, n_genes)
     ) ** np.sign(2 * rng.uniform(size=n_genes) - 1)
-    DE_effects[~G_DE] = 1.0
+    DE_effects[~G_DE] = 0.0
     params_de = pd.DataFrame(
         {
             "id": [f"g{i + 1}" for i in np.where(G_DE)[0]],
-            "DE_effect": np.log2(DE_effects[G_DE]),
+            "DE_effect": DE_effects[G_DE],
         }
     )
 
@@ -382,10 +380,8 @@ def generate_diffrhythmic_rnaseq(
 
     DE_effects: NDArray = np.hstack([np.ones((n_genes, 1)), DE_effects.reshape(-1, 1)])
 
-    lambda_: NDArray = (
-        np.repeat(lambda_, 2 * N, axis=1)
-        * DE_effects[:, np.repeat([0, 1], N)]
-        * A[:, np.repeat([0, 1], N)] ** t_pattern
+    lambda_: NDArray = np.repeat(lambda_, 2 * N, axis=1) * 2 ** (
+        DE_effects[:, np.repeat([0, 1], N)] + A[:, np.repeat([0, 1], N)] * t_pattern
     )
 
     mu: NDArray = lambda_ / (np.sum(lambda_, axis=0) / lib_size)
