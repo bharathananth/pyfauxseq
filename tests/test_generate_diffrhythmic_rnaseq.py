@@ -60,13 +60,15 @@ def test_unique_colnames(reps, t):
     st.floats(min_value=0.01, max_value=1.0),  # rhy_frac
     st.floats(min_value=0.0, max_value=2.0),  # min_A_effect
     st.floats(min_value=0.0, max_value=2.0),  # min_DE_effect
+    st.sampled_from(["liver", "multitissue", "invalid", ""]), # emp_dist
 )
-def test_params(n_genes, rhy_frac, min_A_effect, min_DE_effect):
+def test_params(n_genes, rhy_frac, min_A_effect, min_DE_effect, emp_dist):
     data = generate_diffrhythmic_rnaseq(
         n_genes=n_genes,
         rhy_frac=rhy_frac,
         min_A_effect=min_A_effect,
         min_DE_effect=min_DE_effect,
+        emp_dist=emp_dist
     )
     params = data["params"]
     assert params["category"].isin(["loss", "gain", "change", "same", np.nan]).all()

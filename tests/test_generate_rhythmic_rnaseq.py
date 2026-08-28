@@ -1,4 +1,5 @@
 """Tests for `generate_diffrhythmic_rnaseq`."""
+from zmq import VMCI_BUFFER_MIN_SIZE
 
 import numpy as np
 import pytest as pt
@@ -60,12 +61,14 @@ def test_unique_colnames(reps, t):
     st.integers(min_value=1000, max_value=20000),  # n_genes
     st.floats(min_value=0.01, max_value=1.0),  # rhy_frac
     st.floats(min_value=0.0, max_value=2.0),  # min_A_effect
+    st.sampled_from(["liver", "multitissue", "invalid", ""]), # emp_dist
 )
-def test_params(n_genes, rhy_frac, min_A_effect):
+def test_params(n_genes, rhy_frac, min_A_effect, emp_dist):
     data = generate_rhythmic_rnaseq(
         n_genes=n_genes,
         rhy_frac=rhy_frac,
         min_A_effect=min_A_effect,
+        emp_dist = emp_dist,
     )
     assert data["params"].shape[0] / n_genes == pt.approx(rhy_frac, abs=0.1)
     assert data["params"]["id"].isin(data["counts"].index.to_list()).all()

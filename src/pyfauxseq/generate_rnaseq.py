@@ -5,14 +5,10 @@ This module currently provides:
 - generate_diffrhythmic_rnaseq: to generate data under two conditions
 """
 
-import errno
-import os
-
 import numpy as np
 import pandas as pd
 from numpy.random._generator import Generator
 from numpy.typing import ArrayLike, NDArray
-from pandas.core.groupby.generic import DataFrameGroupBy
 from scipy.stats import nbinom
 
 from .utils import load_dataset
@@ -26,7 +22,7 @@ def generate_rhythmic_rnaseq(
     rhy_frac: float = 0.1,
     min_A_effect: float = 0.2,
     A_spread: float = 0.5,
-    emp_dist: dict | str | None = None,
+    emp_dist: dict | str = "liver",
     depth: int = 40000000,
     lib_size_var: tuple[float, float] = (0.8, 1.2),
     seed=None,
@@ -57,7 +53,7 @@ def generate_rhythmic_rnaseq(
         log2 fold), by default 0.5
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
         empirical mean (mu) and size (1/dispersion) values for a corpus of
-        genes or name of a file containing the dictionary, by default None
+        genes or name of a file containing the dictionary, by default "liver"
         (read from mouse liver dataset)
     depth : int, optional
         average sequencing depth of different samples, by default 4e7
@@ -102,28 +98,33 @@ def generate_rhythmic_rnaseq(
     ):
         raise ValueError("Length of reps must be 1 or the same as length of t")
 
-    if emp_dist is None:
-        emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
-    elif isinstance(emp_dist, str):
-        if os.path.isfile(emp_dist):
-            emp_dist: pd.DataFrame = load_dataset(emp_dist)
-            if emp_dist.shape[1] > 2:
-                grouped: DataFrameGroupBy = emp_dist.groupby(
-                    by=list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
-                )
-                emp_dist: pd.DataFrame | pd.Series = grouped.get_group(
-                    rng.choice(np.array(list(grouped.groups.keys())))
-                )
-        else:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
+    if isinstance(emp_dist, str):
+        match emp_dist:
+            case "liver":
+                emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
+            case "multitissue":
+                emp_dist: pd.DataFrame = load_dataset("Mm_multitissue_LD_ALF.csv.gz")
+            case _:
+                emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
     elif not isinstance(emp_dist, pd.DataFrame):
         raise ValueError("The provided emp_dist is invalid.")
+
+    if emp_dist.shape[1] > 2:
+        group_cols = list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
+
+        unique_groups = emp_dist[group_cols].drop_duplicates()
+        sampled_row = unique_groups.iloc[rng.choice(len(unique_groups))]
+
+        selected_key = (
+            sampled_row.iloc[0] if len(group_cols) == 1 else tuple(sampled_row)
+        )
+
+        by_param = group_cols[0] if len(group_cols) == 1 else group_cols
+        emp_dist = emp_dist.groupby(by=by_param).get_group(selected_key)
 
     t: NDArray = np.array(t)
     t: NDArray = np.repeat(t, reps)
     N: int = len(t)
-    # min_A_effect: float = min_A_effect * np.log(2)
-    # A_spread: float = A_spread * np.log(2)
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
 
@@ -192,7 +193,7 @@ def generate_diffrhythmic_rnaseq(
     min_DE_effect: float = 0.5,
     DE_spread: float = 0.5,
     groups: tuple[str, str] = ("ctrl", "expt"),
-    emp_dist: pd.DataFrame | str | None = None,
+    emp_dist: pd.DataFrame | str = "liver",
     depth: int = 40000000,
     lib_size_var: tuple[float, float] = (0.8, 1.2),
     seed=None,
@@ -237,7 +238,7 @@ def generate_diffrhythmic_rnaseq(
         labels for the two groups/conditions, by default ("ctrl", "expt")
     emp_dist : dictionary with keys 'mu' and 'size'| str, optional
         empirical mean (mu) and size (1/dispersion) values for a corpus of
-        genes or name of a file containing the dictionary, by default None
+        genes or name of a file containing the dictionary, by default "liver"
         (read from mouse liver dataset)
     depth : int, optional
         average sequencing depth of different samples, by default 4e7
@@ -284,28 +285,35 @@ def generate_diffrhythmic_rnaseq(
     ):
         raise ValueError("Length of reps must be 1 or the same as length of t")
 
-    if emp_dist is None:
-        emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
-    elif isinstance(emp_dist, str):
-        if os.path.isfile(emp_dist):
-            emp_dist: pd.DataFrame = load_dataset(emp_dist)
-            if emp_dist.shape[1] > 2:
-                grouped: DataFrameGroupBy = emp_dist.groupby(
-                    by=list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
-                )
-                emp_dist: pd.DataFrame | pd.Series = grouped.get_group(
-                    rng.choice(np.array(list(grouped.groups.keys())))
-                )
-        else:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), emp_dist)
+    if isinstance(emp_dist, str):
+        match emp_dist:
+            case "liver":
+                emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
+            case "multitissue":
+                emp_dist: pd.DataFrame = load_dataset("Mm_multitissue_LD_ALF.csv.gz")
+            case _:
+                emp_dist: pd.DataFrame = load_dataset("Mm_liver_LD_NC.csv.gz")
     elif not isinstance(emp_dist, pd.DataFrame):
         raise ValueError("The provided emp_dist is invalid.")
+
+    if emp_dist.shape[1] > 2:
+        group_cols = list(pd.Index.difference(emp_dist.columns, ["size", "mu"]))
+
+        unique_groups = emp_dist[group_cols].drop_duplicates()
+        sampled_row = unique_groups.iloc[rng.choice(len(unique_groups))]
+
+        selected_key = (
+            sampled_row.iloc[0] if len(group_cols) == 1 else tuple(sampled_row)
+        )
+
+        by_param = group_cols[0] if len(group_cols) == 1 else group_cols
+        emp_dist = emp_dist.groupby(by=by_param).get_group(selected_key)
 
     t: NDArray = np.repeat(t, reps)
     N: int = len(t)
 
     G_rhy: NDArray = rng.uniform(size=n_genes) <= rhy_frac
-    prior_p = rng.gamma(DR_probs, 1.0, 4)
+    prior_p = rng.gamma(shape=DR_probs, scale=1.0, size=4)
     prior_p = prior_p / prior_p.sum()
     DR_counts = rng.multinomial(G_rhy.sum(), prior_p, 1).squeeze()
     DR_classes = np.array(["gain", "loss", "change", "same"])
