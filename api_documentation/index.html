@@ -672,12 +672,12 @@ log2 fold), by default 0.5</p>
             <td>
               <div class="doc-md-description">
                 <p>empirical mean (mu) and size (1/dispersion) values for a corpus of
-genes or name of a file containing the dictionary, by default None
+genes or name of a file containing the dictionary, by default "liver"
 (read from mouse liver dataset)</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                  <code>&#39;liver&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -774,7 +774,11 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src/pyfauxseq/generate_rnaseq.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 21</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
 <span class="normal"> 22</span>
 <span class="normal"> 23</span>
 <span class="normal"> 24</span>
@@ -932,7 +936,8 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span>
-<span class="normal">179</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_rhythmic_rnaseq</span><span class="p">(</span>
+<span class="normal">179</span>
+<span class="normal">180</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_rhythmic_rnaseq</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
     <span class="n">reps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
@@ -940,7 +945,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
     <span class="n">rhy_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="n">min_A_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
     <span class="n">A_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">emp_dist</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">emp_dist</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;liver&quot;</span><span class="p">,</span>
     <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40000000</span><span class="p">,</span>
     <span class="n">lib_size_var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span>
     <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -971,7 +976,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="sd">        log2 fold), by default 0.5</span>
 <span class="sd">    emp_dist : dictionary with keys &#39;mu&#39; and &#39;size&#39;| str, optional</span>
 <span class="sd">        empirical mean (mu) and size (1/dispersion) values for a corpus of</span>
-<span class="sd">        genes or name of a file containing the dictionary, by default None</span>
+<span class="sd">        genes or name of a file containing the dictionary, by default &quot;liver&quot;</span>
 <span class="sd">        (read from mouse liver dataset)</span>
 <span class="sd">    depth : int, optional</span>
 <span class="sd">        average sequencing depth of different samples, by default 4e7</span>
@@ -1016,28 +1021,33 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of reps must be 1 or the same as length of t&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">emp_dist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">):</span>
-            <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">grouped</span><span class="p">:</span> <span class="n">DataFrameGroupBy</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
-                    <span class="n">by</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">emp_dist</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">]))</span>
-                <span class="p">)</span>
-                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span>
-                    <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">grouped</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="n">emp_dist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">match</span> <span class="n">emp_dist</span><span class="p">:</span>
+            <span class="k">case</span> <span class="s2">&quot;liver&quot;</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
+            <span class="k">case</span> <span class="s2">&quot;multitissue&quot;</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_multitissue_LD_ALF.csv.gz&quot;</span><span class="p">)</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The provided emp_dist is invalid.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">group_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">emp_dist</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">]))</span>
+
+        <span class="n">unique_groups</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="p">[</span><span class="n">group_cols</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+        <span class="n">sampled_row</span> <span class="o">=</span> <span class="n">unique_groups</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_groups</span><span class="p">))]</span>
+
+        <span class="n">selected_key</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">sampled_row</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sampled_row</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">by_param</span> <span class="o">=</span> <span class="n">group_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">group_cols</span>
+        <span class="n">emp_dist</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">by_param</span><span class="p">)</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">selected_key</span><span class="p">)</span>
 
     <span class="n">t</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">reps</span><span class="p">)</span>
     <span class="n">N</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-    <span class="c1"># min_A_effect: float = min_A_effect * np.log(2)</span>
-    <span class="c1"># A_spread: float = A_spread * np.log(2)</span>
 
     <span class="n">G_rhy</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rhy_frac</span>
 
@@ -1235,11 +1245,11 @@ the actual numbers around the averages, by default (1.25, 1.25, 1.25,
             </td>
             <td>
               <div class="doc-md-description">
-                <p>minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5</p>
+                <p>minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2</p>
               </div>
             </td>
             <td>
-                  <code>0.5</code>
+                  <code>0.2</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1252,11 +1262,11 @@ the actual numbers around the averages, by default (1.25, 1.25, 1.25,
             <td>
               <div class="doc-md-description">
                 <p>mean of the exponential distribution of rhythmic gene amplitudes (in
-log2 fold), by default 1</p>
+log2 fold), by default 0.5</p>
               </div>
             </td>
             <td>
-                  <code>1</code>
+                  <code>0.5</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1300,11 +1310,11 @@ log2 fold), by default 1</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>mean of the exponential distribution of DE fold changes, by default 1.0</p>
+                <p>mean of the exponential distribution of DE fold changes, by default 0.5</p>
               </div>
             </td>
             <td>
-                  <code>1</code>
+                  <code>0.5</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1333,12 +1343,12 @@ log2 fold), by default 1</p>
             <td>
               <div class="doc-md-description">
                 <p>empirical mean (mu) and size (1/dispersion) values for a corpus of
-genes or name of a file containing the dictionary, by default None
+genes or name of a file containing the dictionary, by default "liver"
 (read from mouse liver dataset)</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                  <code>&#39;liver&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -1437,8 +1447,7 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src/pyfauxseq/generate_rnaseq.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">182</span>
-<span class="normal">183</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
 <span class="normal">184</span>
 <span class="normal">185</span>
 <span class="normal">186</span>
@@ -1662,20 +1671,28 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="normal">404</span>
 <span class="normal">405</span>
 <span class="normal">406</span>
-<span class="normal">407</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_diffrhythmic_rnaseq</span><span class="p">(</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
+<span class="normal">409</span>
+<span class="normal">410</span>
+<span class="normal">411</span>
+<span class="normal">412</span>
+<span class="normal">413</span>
+<span class="normal">414</span>
+<span class="normal">415</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_diffrhythmic_rnaseq</span><span class="p">(</span>
     <span class="n">t</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
     <span class="n">reps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span>
     <span class="n">n_genes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="n">rhy_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="n">DR_probs</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">),</span>
-    <span class="n">min_A_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">A_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">min_A_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">A_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">DE_frac</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
     <span class="n">min_DE_effect</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">DE_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">DE_spread</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">groups</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ctrl&quot;</span><span class="p">,</span> <span class="s2">&quot;expt&quot;</span><span class="p">),</span>
-    <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;liver&quot;</span><span class="p">,</span>
     <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40000000</span><span class="p">,</span>
     <span class="n">lib_size_var</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span>
     <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1706,21 +1723,21 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
 <span class="sd">        the actual numbers around the averages, by default (1.25, 1.25, 1.25,</span>
 <span class="sd">        1.25)</span>
 <span class="sd">    min_A_effect : float, optional</span>
-<span class="sd">        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.5</span>
+<span class="sd">        minimum amplitude (in log2 fold) of rhythmic genes, by default 0.2</span>
 <span class="sd">    A_spread : float, optional</span>
 <span class="sd">        mean of the exponential distribution of rhythmic gene amplitudes (in</span>
-<span class="sd">        log2 fold), by default 1</span>
+<span class="sd">        log2 fold), by default 0.5</span>
 <span class="sd">    DE_frac : float, optional</span>
 <span class="sd">        fraction of differentially expressed (DE) genes, by default 0.1</span>
 <span class="sd">    min_DE_effect : float, optional</span>
 <span class="sd">        minimum log2 fold change in expression of DE genes, by default 0.5</span>
 <span class="sd">    DE_spread : float, optional</span>
-<span class="sd">        mean of the exponential distribution of DE fold changes, by default 1.0</span>
+<span class="sd">        mean of the exponential distribution of DE fold changes, by default 0.5</span>
 <span class="sd">    groups : tuple, optional</span>
 <span class="sd">        labels for the two groups/conditions, by default (&quot;ctrl&quot;, &quot;expt&quot;)</span>
 <span class="sd">    emp_dist : dictionary with keys &#39;mu&#39; and &#39;size&#39;| str, optional</span>
 <span class="sd">        empirical mean (mu) and size (1/dispersion) values for a corpus of</span>
-<span class="sd">        genes or name of a file containing the dictionary, by default None</span>
+<span class="sd">        genes or name of a file containing the dictionary, by default &quot;liver&quot;</span>
 <span class="sd">        (read from mouse liver dataset)</span>
 <span class="sd">    depth : int, optional</span>
 <span class="sd">        average sequencing depth of different samples, by default 4e7</span>
@@ -1767,28 +1784,35 @@ expression analysis of RNA-seq data. BMC Bioinformatics. 2013;14: 91.</p>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Length of reps must be 1 or the same as length of t&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">emp_dist</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">):</span>
-            <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">grouped</span><span class="p">:</span> <span class="n">DataFrameGroupBy</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
-                    <span class="n">by</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">emp_dist</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">]))</span>
-                <span class="p">)</span>
-                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span>
-                    <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">grouped</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="n">emp_dist</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">match</span> <span class="n">emp_dist</span><span class="p">:</span>
+            <span class="k">case</span> <span class="s2">&quot;liver&quot;</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
+            <span class="k">case</span> <span class="s2">&quot;multitissue&quot;</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_multitissue_LD_ALF.csv.gz&quot;</span><span class="p">)</span>
+            <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                <span class="n">emp_dist</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Mm_liver_LD_NC.csv.gz&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">emp_dist</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The provided emp_dist is invalid.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">group_cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">emp_dist</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="s2">&quot;mu&quot;</span><span class="p">]))</span>
+
+        <span class="n">unique_groups</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="p">[</span><span class="n">group_cols</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+        <span class="n">sampled_row</span> <span class="o">=</span> <span class="n">unique_groups</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_groups</span><span class="p">))]</span>
+
+        <span class="n">selected_key</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">sampled_row</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sampled_row</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">by_param</span> <span class="o">=</span> <span class="n">group_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_cols</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">group_cols</span>
+        <span class="n">emp_dist</span> <span class="o">=</span> <span class="n">emp_dist</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">by_param</span><span class="p">)</span><span class="o">.</span><span class="n">get_group</span><span class="p">(</span><span class="n">selected_key</span><span class="p">)</span>
 
     <span class="n">t</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">reps</span><span class="p">)</span>
     <span class="n">N</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
     <span class="n">G_rhy</span><span class="p">:</span> <span class="n">NDArray</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n_genes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">rhy_frac</span>
-    <span class="n">prior_p</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">DR_probs</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">prior_p</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">DR_probs</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     <span class="n">prior_p</span> <span class="o">=</span> <span class="n">prior_p</span> <span class="o">/</span> <span class="n">prior_p</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">DR_counts</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="n">G_rhy</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">prior_p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="n">DR_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;gain&quot;</span><span class="p">,</span> <span class="s2">&quot;loss&quot;</span><span class="p">,</span> <span class="s2">&quot;change&quot;</span><span class="p">,</span> <span class="s2">&quot;same&quot;</span><span class="p">])</span>
