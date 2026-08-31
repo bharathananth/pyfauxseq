@@ -1,7 +1,7 @@
 [project]
 name = "pyfauxseq"
 version = "0.1.0"
-description = "This package can generate synthetic timeseries RNA-seq data with a fraction of rhythmic genes and empirical relationship between mean expression and variability across replicates of genes."
+description = "This package generates synthetic time-series RNA-seq data containing a user-specified fraction of rhythmic genes, while preserving the empirical relationship between mean gene expression and variability observed across biological replicates. It is the Python counterpart to fauxseq, an R package providing the same functionality."
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
 requires-python = ">= 3.10"
 license = "MIT"

@@ -1,5 +1,5 @@
 # pyfauxseq
-### A python Implementation of the R package fauxseq
+### A Synthetic Timeseries RNA-seq Data Generator
 
 ![PyPI - Version](https://img.shields.io/pypi/v/pyfauxseq)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyfauxseq)
