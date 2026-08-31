@@ -1,5 +1,4 @@
 """Tests for `generate_diffrhythmic_rnaseq`."""
-from zmq import VMCI_BUFFER_MIN_SIZE
 
 import numpy as np
 import pytest as pt
