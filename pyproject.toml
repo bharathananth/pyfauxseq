@@ -47,7 +47,7 @@ docs = [
 [project.urls]
 bugs = "https://github.com/bharathananth/pyfauxseq/issues"
 homepage = "https://github.com/bharathananth/pyfauxseq"
-documentation = "https://bharathananth.github.io/pypfauxseq"
+documentation = "https://bharathananth.github.io/pyfauxseq"
 
 [tool.hatch.build.targets.sdist]
 # Hatchling includes README, LICENSE, and pyproject.toml by default.
