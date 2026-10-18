@@ -4,6 +4,7 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/pyfauxseq)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyfauxseq)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/bharathananth/pyfauxseq/total)
+[![DOI](https://zenodo.org/badge/1045607533.svg)](https://doi.org/10.5281/zenodo.23446233)
 
 ## What pyfauxseq does
 

@@ -13,10 +13,21 @@ authors:
     email: bharath.ananthasubramaniam@hu-berlin.de
     affiliation: Humboldt-Universität zu Berlin
     orcid: 'https://orcid.org/0000-0003-4467-1546'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23446233
+    description: 'v0.1.0'
 repository-code: 'https://github.com/bharathananth/pyfauxseq'
+url: 'https://bharathananth.github.io/pyfauxseq/'
 abstract: >-
   This package can generate synthetic timeseries RNA-seq
   data with a fraction of rhythmic genes and empirical
   relationship between mean expression and variability
   across replicates of genes.
+keywords:
+  - mean-dispersion trend
+  - negative-binomial counts
 license: MIT
+commit: 02dee4485770235bad2bcf5fc84b030267b97fdd
+version: v0.1.0
+date-released: '2026-10-18'
